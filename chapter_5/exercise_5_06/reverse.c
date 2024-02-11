@@ -3,28 +3,20 @@
 
 void reverse(char *s);
 
-int main(void)
-{
-  char s[100] = "test";
+int main(void) {
+    char s[100] = "abcde";
 
-  reverse(s);
-  puts(s);
+    reverse(s);
+    puts(s);
 
-  return 0;
+    return 0;
 }
 
-void reverse(char *s)
-{
-  char *t = s + strlen(s) - 1;
-  char aux = 0;
-
-  if (*s == '\0')
-    return;
-
-  while (s < t)
-  {
-    aux = *t;
-    *t-- = *s;
-    *s++ = aux;
-  }
+void reverse(char *s) {
+    char *e = s + (strlen(s) - 1);
+    while (s < e) {
+        char tmp = *s;
+        *s++ = *e;
+        *e-- = tmp;
+    }
 }

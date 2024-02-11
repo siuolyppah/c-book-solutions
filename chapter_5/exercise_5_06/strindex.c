@@ -2,38 +2,34 @@
 
 int strindex(char *s, char *t);
 
-int main(void)
-{
-  char s[] = "this is first string";
-  char t[] = "this";
+int main(void) {
+    char s[] = "hello, world";
+    char t[] = "lo";
 
-  printf("%d", strindex(s, t));
+    printf("%d", strindex(s, t));
 
-  return 0;
+    return 0;
 }
 
-int strindex(char *s, char *t)
-{
-  char *first;
-  char *second;
-  int pos = 0;
+// find t in s
+int strindex(char *s, char *t) {
+    char *ss;
+    char *tt;
+    int pos = 0;
 
-  while (*s != '\0')
-  {
-    if (*s == *t)
-    {
-      first = s;
-      second = t;
+    while (*s != '\0') {
+        if (*s == *t) {
+            ss = s;
+            tt = t;
 
-      while (*first++ == *second++)
-      {
-        if (*second == '\0')
-          return pos;
-      }
+            while (*ss++ == *tt++) {
+                if (*tt == '\0')
+                    return pos;
+            }
+        }
+        pos++;
+        s++;
     }
-    pos++;
-    s++;
-  }
 
-  return -1;
+    return -1;
 }
