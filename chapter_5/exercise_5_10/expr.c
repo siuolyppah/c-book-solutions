@@ -1,128 +1,55 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
 
-#define STACK_SIZE 15
+#define  STACK_SIZE 100
+int stack[STACK_SIZE];
+size_t sp = 0;
 
-unsigned char stack_pointer = 0;
-float stack[STACK_SIZE];
+void push(int x) {
+    stack[sp++] = x;
+}
 
-float pop(void);
-void push(float element);
-
-int main(int argc, char *argv[])
-{
-  char Error = 0;
-
-  for (size_t i = 1; i < argc; ++i)
-  {
-    float number = atof(argv[i]);
-
-    if (number || strcmp(argv[i], "0") == 0)
-    {
-      push(number);
+void draw_ops(int *op1, int *op2) {
+    if (sp < 2) {
+        printf("Error: the expression is invalid.\n");
+        return;
     }
-    else if (strlen(argv[i]) == 1)
-    {
-      if (stack_pointer >= 2 && stack_pointer < STACK_SIZE)
-      {
-        float number2 = pop();
-        float number1 = pop();
+    *op2 = stack[--sp];
+    *op1 = stack[--sp];
+}
 
-        char op = *argv[i];
-        switch (op)
-        {
-        case '+':
-          push(number1 + number2);
-          break;
 
-        case '-':
-          push(number1 - number2);
-          break;
+int main(int argc, char *argv[]) {
+    int op1, op2;
 
-        case '*': // This char might require to be escaped when passed as an argument.
-          push(number1 * number2);
-          break;
+    for (int i = 1; i < argc; i++) {
+        switch (*argv[i]) {
+            case '+':
+                draw_ops(&op1, &op2);
+                push(op1 + op2);
+                break;
+            case '-':
+                draw_ops(&op1, &op2);
+                push(op1 - op2);
+                break;
+            case '*':
+                draw_ops(&op1, &op2);
+                push(op1 * op2);
+                break;
+            case '\\':
+                draw_ops(&op1, &op2);
+                if (op2 != 0) {
+                    push(op1 / op2);
+                } else {
+                    printf("Error: division by zero.\n");
+                }
+                break;
 
-        case '/':
-          if (number2 == 0)
-          {
-            Error = 4;
-          }
-          else
-          {
-            push(number1 / number2);
-          }
-          break;
-
-        default:
-          Error = 3;
-          break;
+            default:
+                push(atoi(argv[i]));
+                break;
         }
-      }
-      else
-      {
-        Error = 2;
-      }
-    }
-    else
-    {
-      Error = 1;
-    }
-  }
-
-  if (Error)
-  {
-    switch (Error)
-    {
-    case 1:
-      printf("Error: arguments should be numbers or one of the following mathematical operations: '+', '-', '*', '/'.\n");
-      break;
-
-    case 2:
-      printf("Error: too many or too few arguments.\n");
-      break;
-
-    case 3:
-      printf("Error: invalid operation. use one of the following mathematical operations: '+', '-', '*', '/'.\n");
-      break;
-
-    case 4:
-      printf("Error: division by zero (NaN).\n");
-      break;
-
-    default:
-      break;
     }
 
-    return EXIT_FAILURE;
-  }
-
-  printf("result: %.3f", pop());
-
-  return EXIT_SUCCESS;
-}
-
-float pop(void)
-{
-  if (stack_pointer > 0)
-  {
-    return stack[stack_pointer--];
-  }
-
-  printf("Error: the stack is empty.\n");
-  return 0;
-}
-
-void push(float element)
-{
-  if (stack_pointer < STACK_SIZE)
-  {
-    stack[++stack_pointer] = element;
-  }
-  else
-  {
-    printf("Error: the stack is full.\n");
-  }
+    printf("Result of the expression: %d\n", stack[sp - 1]);
 }
