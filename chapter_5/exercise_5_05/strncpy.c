@@ -1,23 +1,31 @@
 #include <stdio.h>
+#include <malloc.h>
+#include <string.h>
 
-void strcpy_ptr(char *s, char *t, size_t n);
+void strncpy_ptr(char *s, char *t, size_t n);
 
-int main(void)
-{
-  char s[100] = "This is the first string";
-  char *t = "Test is the second string, that is cool";
-  size_t nr_chars = 26;
+void test(char *s, char *t, size_t n) {
+    // copy s from only readable section to malloced memory to allow update
+    char *buf = (char *) malloc(sizeof(char) * 100);
+    strcpy(buf, s);
 
-  strcpy_ptr(s, t, nr_chars);
+    strncpy_ptr(buf, t, n);
+    puts(buf);
 
-  puts(s);
-
-  return 0;
+    free(buf);
 }
 
-void strcpy_ptr(char *s, char *t, size_t n)
-{
-  while ((*s++ = *t++) && --n)
-    ;
-  ;
+int main(void) {
+    test("long_string", "short", 1);
+    test("long_string", "short", 7);
+
+    return 0;
+}
+
+void strncpy_ptr(char *s, char *t, size_t n) {
+    for (; n > 0 && *t != '\0'; --n) {
+        *s++ = *t++;
+    }
+
+    *s = '\0';
 }
