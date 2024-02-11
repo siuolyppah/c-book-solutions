@@ -60,7 +60,7 @@ void ungetch(int c) {
 /**
  * getint: get next integer from input into *pn
  * @param pn: Pointer to an integer where the input integer will be stored.
- * @return: The last character read from the input.
+ * @return: `EOF` if the input is at EOF, `0` if the next input is not a number, and the `a positive val(next input character)` otherwise.
  */
 int getint(int *pn) {
     int c, sign;
