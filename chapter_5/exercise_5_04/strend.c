@@ -3,45 +3,42 @@
 
 int strend(char *s, char *t);
 
-int main(void)
-{
-  char *s = "This si a simple string";
-  char *t1 = "string";
-  char *t2 = "random string";
+int main(void) {
+    char *s = "This si a simple string";
+    char *t1 = "string";
+    char *t2 = "balabala string";
 
-  // Test if the string t1 occurs at the end of string s.
-  if (strend(s, t1))
-    puts("The string t1 orrurs at the end of the string s.");
-  else
-    puts("The string t1 doesn't orrur at the end of the string s.");
+    if (strend(s, t1)) {
+        puts("string t1 occurs at the end of string s.");
+    } else {
+        puts("string t1 doesn't occur at the end of string s.");
+    }
 
-  // Test if the string t2 occurs at the end of string s.
-  if (strend(s, t2))
-    puts("The string t2 orrurs at the end of the string s.");
-  else
-    puts("The string t2 doesn't orrur at the end of the string s.");
+    if (strend(s, t2)) {
+        puts("string t2 occurs at the end of string s.");
+    } else {
+        puts("string t2 doesn't occur at the end of string s.");
+    }
 
-  return 0;
+    return 0;
 }
 
-//  Returns 1 if the string t occurs at the end of the string s, and zero otherwise.
-int strend(char *s, char *t)
-{
-  // Determine the lengths of the strings.
-  size_t s_length = strlen(s);
-  size_t t_length = strlen(t);
+/**
+ * strend: return 1 if string t occurs at the end of string s, and zero otherwise.
+ */
+int strend(char *s, char *t) {
+    // move the pointers to the end of the strings
+    size_t s_length = strlen(s);
+    size_t t_length = strlen(t);
+    s += s_length;
+    t += t_length;
 
-  // Move the s & t pointer to the end of the corresponding strings.
-  s += s_length;
-  t += t_length;
+    // compare the strings from the end
+    while (t_length && (*s-- == *t--))
+        --t_length;
 
-  // Check backwards if each character from string t occurs in the corresonding
-  // location from the string s.
-  while (t_length && (*s-- == *t--))
-    --t_length;
+    if (t_length)
+        return 0;
 
-  if (t_length)
-    return 0;
-
-  return 1;
+    return 1;
 }
